@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NumLockTrayIcon
@@ -12,35 +12,11 @@ namespace NumLockTrayIcon
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(new NumLockApplicationContext());
-        }
-    }
+            NumLockApplicationContext ctx = new NumLockApplicationContext();
 
-    public class NumLockApplicationContext : ApplicationContext
-    {
-        private NotifyIcon trayIcon;
+            Task.Run(() => ctx.UpdateIconAsync());
 
-        public NumLockApplicationContext()
-        {
-            trayIcon = new NotifyIcon()
-            {
-                Icon = GetIcon(),
-                ContextMenu = new ContextMenu(new MenuItem[] {
-                new MenuItem("Exit", Exit)
-            }),
-                Visible = true
-            };
-        }
-
-        private Icon GetIcon()
-        {
-            return Control.IsKeyLocked(Keys.NumLock) ? Properties.Resources.locked_icon : Properties.Resources.unlocked_icon;
-        }
-
-        void Exit(object sender, EventArgs e)
-        {
-            trayIcon.Visible = false;
-            Application.Exit();
+            Application.Run(ctx);
         }
     }
 }
