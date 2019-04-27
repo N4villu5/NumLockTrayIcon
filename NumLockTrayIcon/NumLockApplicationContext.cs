@@ -10,9 +10,13 @@ namespace NumLockTrayIcon
         private NotifyIcon trayIcon;
         private bool numLockState;
 
+        private static readonly Icon lockedIcon = Properties.Resources.locked_icon;
+        private static readonly Icon unlockedIcon = Properties.Resources.unlocked_icon;
+
         public NumLockApplicationContext()
         {
             numLockState = GetNumLockState();
+
             trayIcon = new NotifyIcon()
             {
                 Icon = GetIcon(),
@@ -30,7 +34,6 @@ namespace NumLockTrayIcon
                 if (numLockState != GetNumLockState())
                 {
                     numLockState = !numLockState;
-                    trayIcon.Icon.Dispose();
                     trayIcon.Icon = GetIcon();
                 }
                 await Task.Delay(1000);
@@ -46,7 +49,7 @@ namespace NumLockTrayIcon
 
         private Icon GetIcon()
         {
-            return numLockState ? Properties.Resources.locked_icon : Properties.Resources.unlocked_icon;
+            return numLockState ? lockedIcon : unlockedIcon;
         }
         
         private bool GetNumLockState()
