@@ -30,6 +30,7 @@ namespace NumLockTrayIcon
                 if (numLockState != GetNumLockState())
                 {
                     numLockState = !numLockState;
+                    trayIcon.Icon.Dispose();
                     trayIcon.Icon = GetIcon();
                 }
                 await Task.Delay(1000);
@@ -39,6 +40,7 @@ namespace NumLockTrayIcon
         private void Exit(object sender, EventArgs e)
         {
             trayIcon.Visible = false;
+            trayIcon.Dispose();
             Application.Exit();
         }
 
